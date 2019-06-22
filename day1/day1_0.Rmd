@@ -1,0 +1,82 @@
+---
+title: "visualization"
+author: "Sanghoo Yoon"
+date: '2019 6 22 '
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Motivation
+
+1. 본 교육과정을 신청한 주된 동기는 무엇입니까?
+
+```{r echo=TRUE}
+if(!require(plotly)) install.packages("plotly"); library(plotly)
+
+data <- data.frame(value=c(62.1, 41.4),reason=c("업무에 필요","역량 강화"))
+
+p <- plot_ly(data, labels = ~reason, values = ~value, type = 'pie') %>%
+  layout(title = 'R 데이터 시각화 교육신청 동기',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+p
+```
+
+## experience
+
+2. R 프로그램 사용 경험
+
+```{r}
+
+data <- data.frame(value=c(75.9, 24.1),reason=c("있다","없다"))
+
+p <- plot_ly(data, labels = ~reason, values = ~value, type = 'pie') %>%
+  layout(title = 'R 프로그램 사용 경험',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+p
+```
+
+## word cloud
+
+3. 본 교육과정에서 배우고 싶은 과정
+```{r message=FALSE}
+
+data<-c("실험 데이터를 의미있게 분석하는 방법",
+"공간자료와 지도,시각화분석", "R 프로그램을 이용하여 업무상 필요한 다양한 형태의 그래프를 작성하는 과정",
+"R 프로그램 기초 및 시각화 관련 내용", "R의 기초와 이해", "데이터 시각화를 위한 내용도 중요하지만 초보라서 시각화 이전에 읽어오기, 핸들링, 분석 등 데이터를 처리하는기본 과정", "R 프로그램을 이용한 공간데이터 분석",
+"R활용한 보고서, 중점 추진과제 자료 시각화 ", "간단한 데이터 전처리, 갈끔한 그래프 그리는 방법",
+"자료에 따른 적절한 시각화 방법, 시각화 및 분석 결과의 해석","시각화 분석 및 시각화 실제",
+"R을 이용한 자료의 다양한 시각화 방법 및 사례", "지도데이터 R프로그램으로 불러 들이는 방법 및 지도에 표시하는 방법", "다양한 데이터 시각화 방법, 잘 만들어진 시각화 데이터 소스를 찾아 활용하는 방법, 데이터의 성질에 따라 어떤 데이터  시각화가 좋은지 판단하는 방법", "R의 큰장점으로 알려진 시각화에 대해서 기초",
+"시각화 패키지 활용방법", "R 프로그램을 이용한 미세먼지 등 대기오염 물질의 표출방법", 
+"R 프로그램의 실무 사용과 사례", "R의 그래픽 기법을 활용한 다양한 시각화 방법",
+"공간자료와 지도", "R 프로그램의 기본적 사용", "연도별 누적데이터를 이용한 데이터 시각화(시군구별 맵을 이용한 시각화)", "R을 이용하여 자료를 다양한 그래프로 표현하는 능력", "R프로그램을 활용한 통계데이터의 도식화를 용이하게 하고자 교육" )
+
+print(data)
+```
+
+## Slide with Plot
+
+
+```{r echo=TRUE}
+library(KoNLP)
+library(wordcloud2)
+
+useNIADic() ##형태소 다운로드
+nouns <- extractNoun(data)  ##명사 추출
+
+cnts <- sort(table(unlist(nouns)), decreasing = TRUE)  ## 명사별 count 결과 저장
+cnts2 <- cnts[cnts > 2 & nchar(names(cnts)) > 1] #2단어 이상만 추출
+print(head(cnts2,10)) #순서대로 출력
+
+wordcloud2(data.frame(word=names(cnts2), freq=as.numeric(cnts2)),  color = "random-light", backgroundColor = "black", shape="cloud") #워드 클라우드 그리기
+
+```
+
