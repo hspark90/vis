@@ -1,0 +1,27 @@
+---
+title: "barplot 그리기"
+author: "Sanghoo Yoon"
+date: "2019년 6월 25일"
+output: html_document
+
+---
+
+```{r}
+knitr::include_graphics('C:/Users/USER/Dropbox/R-work/vis/day3/request/Current dollars.jpg')
+```
+
+```{r echo=TRUE}
+data <- read.csv('C:/Users/USER/Dropbox/R-work/vis/day3/request/Current dollars.csv')
+head(data)
+
+if(!require(ggplot2)) install.packages('ggplot2'); library(ggplot2)
+
+data$dollar<-gsub(",","",data$dollar)
+data$dollar <- as.numeric(paste(data$dollar))
+
+bar<- ggplot(data,aes(factor(year),dollar))
+bar+geom_bar(aes(fill=factor(group)),stat='identity',position='dodge')+
+   ylim(0,70000)+
+    coord_flip()+
+  ggtitle("Average Annual Salary\n of Teachers in Public\n Elementary and \n Secondary School")
+```
